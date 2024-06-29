@@ -39,6 +39,7 @@ class User(Base):
         return {
             "id": self.id,
             "email": self.email,
+            "password": self.password,
             "first_name": self.first_name,
             "last_name": self.last_name,
             "created_at": self.created_at.isoformat(),
