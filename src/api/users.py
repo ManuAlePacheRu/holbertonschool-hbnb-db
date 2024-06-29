@@ -20,8 +20,7 @@ user_input_fields = api.model(
         "email": fields.String(description="Email of the user", required=True),
         "password": fields.String(description="Password"),
         "first_name": fields.String(
-            description="First name of the user", required=True
-        ),
+            description="First name of the user", required=True),
         "last_name": fields.String(
             description="Last name of the user", required=True
         ),
@@ -38,6 +37,7 @@ class UserList(Resource):
     """Handles HTTP requests to URL: /users"""
 
     @api.response(200, "Users found", [user_fields])
+
     def get(self):
         """Get all users"""
         return get_users()
@@ -45,6 +45,7 @@ class UserList(Resource):
     @api.expect(user_input_fields)
     @api.response(201, "User created", user_fields)
     @api.response(400, "Bad request")
+
     def post(self):
         """Create a new user"""
         return create_user(api.payload)
@@ -52,6 +53,8 @@ class UserList(Resource):
 
 @api.doc(params={"user_id": "The ID of the user"})
 @api.response(404, "User not found")
+
+
 class User(Resource):
     """Handles HTTP requests to URL: /users/<user_id>"""
 
