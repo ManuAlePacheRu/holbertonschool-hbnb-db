@@ -16,7 +16,7 @@ class Repos(Enum):
     MEMORY = "memory"
 
 
-DEFAULT_REPOSITORY = Repos.FILE.value
+DEFAULT_REPOSITORY = Repos.DB.value
 
 FILE_STORAGE_FILENAME = "data.json"
 PICKLE_STORAGE_FILENAME = "data.pkl"
