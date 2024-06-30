@@ -3,13 +3,19 @@ Amenity related functionality
 """
 
 from src.models.base import Base
-from src import repo
+from src import repo, db
 
 
-class Amenity(Base):
+class Amenity(Base, db.Model):
     """Amenity representation"""
+    __tablename__ = 'amenities'
 
-    name: str
+    id = db.Column(db.String(36), primary_key=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
+    name = db.Column(db.String(120), nullable=False)
+
+    """name: str"""
 
     def __init__(self, name: str, **kw) -> None:
         """Dummy init"""
