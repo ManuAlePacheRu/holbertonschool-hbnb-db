@@ -2,19 +2,29 @@
 Review related functionality
 """
 
-from src import repo
+from src import repo, db
 from src.models.base import Base
 from src.models.place import Place
 from src.models.user import User
 
-
-class Review(Base):
+        
+class Review(Base, db.Model):
     """Review representation"""
 
-    place_id: str
+    __tablename__ = 'reviews'
+
+    id = db.Column(db.String(36), primary_key=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
+    place_id = db.Column(db.String(36), db.ForeignKey('places.id'), nullable=False)
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    comment = db.Column(db.String(256))
+    rating = db.Column(db.Float, nullable=False)
+
+    """place_id: str
     user_id: str
     comment: str
-    rating: float
+    rating: float"""
 
     def __init__(
         self, place_id: str, user_id: str, comment: str, rating: float, **kw

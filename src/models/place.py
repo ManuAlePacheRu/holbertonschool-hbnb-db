@@ -2,16 +2,40 @@
 Place related functionality
 """
 
-from src import repo
+from src import repo, db
 from src.models.base import Base
 from src.models.city import City
 from src.models.user import User
-
-
-class Place(Base):
+from sqlalchemy import CheckConstraint
+        
+class Place(Base, db.Model):
     """Place representation"""
 
-    name: str
+    __tablename__ = 'places'
+
+    id = db.Column(db.String(36), primary_key=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
+    name = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.String(256))
+    address = db.Column(db.String(256), nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
+    host_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    city_id = db.Column(db.String(36), db.ForeignKey('cities.id'), nullable=False)
+    price_per_night = db.Column(db.Integer, nullable=False)
+    number_of_rooms = db.Column(db.Integer, nullable=False)
+    number_of_bathrooms = db.Column(db.Integer, nullable=False)
+    max_guests = db.Column(db.Integer, nullable=False)
+
+    __table_args__ = (
+    CheckConstraint('price_per_night >= 0', name='check_price_per_night_non_negative'),
+    CheckConstraint('max_guests >= 0', name='check_max_guests_non_negative'),
+    #CheckConstraint('latitude >= -180', name='check_latitude_valid_values'),
+    #CheckConstraint('latitude <= 180', name='check_latitude_valid_values'),
+    )
+
+    """name: str
     description: str
     address: str
     latitude: float
@@ -21,7 +45,7 @@ class Place(Base):
     price_per_night: int
     number_of_rooms: int
     number_of_bathrooms: int
-    max_guests: int
+    max_guests: int"""
 
     def __init__(self, data: dict | None = None, **kw) -> None:
         """Dummy init"""
