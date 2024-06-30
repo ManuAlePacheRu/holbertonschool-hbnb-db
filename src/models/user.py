@@ -2,18 +2,33 @@
 User related functionality
 """
 
-from src import repo
+from src import repo, db
 from typing import Optional
 from src.models.base import Base
+from datetime import datetime
 
 
-class User(Base):
+class User(Base, db.Model):
     """User representation"""
 
-    email: str
+    #class User(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.String(36), primary_key=True)
+    #created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
+    #updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp(), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now(datetime.UTC), nullable=False)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.now(datetime.UTC), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    first_name = db.Column(db.String(120), nullable=False)
+    last_name = db.Column(db.String(120), nullable=False)
+    password = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+    
+    """email: str
     password: str | None
     first_name: str
-    last_name: str
+    last_name: str"""
 
     def __init__(
         self,
@@ -21,14 +36,16 @@ class User(Base):
         first_name: str,
         last_name: str,
         password: Optional[str] = None,
+        is_admin: Optional[bool] = None,
         **kw,
     ):
         """Dummy init"""
         super().__init__(**kw)
         self.email = email
-        self.password = password
         self.first_name = first_name
         self.last_name = last_name
+        self.password = password
+        self.is_admin = is_admin
 
     def __repr__(self) -> str:
         """Dummy repr"""
@@ -39,9 +56,10 @@ class User(Base):
         return {
             "id": self.id,
             "email": self.email,
-            "password": self.password,
             "first_name": self.first_name,
             "last_name": self.last_name,
+            "password": self.password,
+            "is_admin": self.is_admin,
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat(),
         }
@@ -56,7 +74,6 @@ class User(Base):
                 raise ValueError("User already exists")
 
         new_user = User(**user)
-
         repo.save(new_user)
 
         return new_user
@@ -69,13 +86,28 @@ class User(Base):
         if not user:
             return None
 
-        if "email" in data:
+        for key, value in data.items():
+            setattr(user, key, value)
+        
+        
+        """if "email" in data:
             user.email = data["email"]
         if "first_name" in data:
             user.first_name = data["first_name"]
         if "last_name" in data:
             user.last_name = data["last_name"]
+        
+        #####################################
+        if "password" in data:
+            user.password = data["password"]
+        if "is_admin" in data:
+            user.is_admin = data["is_admin"]"""
 
         repo.update(user)
 
         return user
+
+
+#User.query.all()
+#pepe = User("asljdlaskjd@.comasd", "pepe", "señor", id=3)
+#User.query.filter_by(id=3).first()
