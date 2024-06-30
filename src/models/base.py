@@ -47,7 +47,8 @@ class Base(ABC):
         If a class needs a different implementation,
         it should override this method
         """
-        return repo.get(cls.__name__.lower(), id)
+        #return repo.get(cls.__name__.lower(), id)
+        return repo.get(cls.__name__, id)
 
     @classmethod
     def get_all(cls) -> list["Any"]:
@@ -57,7 +58,11 @@ class Base(ABC):
         If a class needs a different implementation,
         it should override this method
         """
-        return repo.get_all(cls.__name__.lower())
+        #return repo.get_all(cls.__name__.lower())
+        #No puedo pasar el nombre de clase en lower
+        #msqalchemy solo reconocerá el nombre de 
+        #clase original
+        return repo.get_all(cls.__name__)
 
     @classmethod
     def delete(cls, id) -> bool:
