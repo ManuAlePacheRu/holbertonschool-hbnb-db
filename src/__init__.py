@@ -2,24 +2,28 @@
 
 from flask import Flask
 from flask_cors import CORS
-
 from src.persistence.repository import RepositoryManager
 
+
+#############################################################
+#                   IMPORT SQLALCHEMY                       #
+#############################################################
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import CheckConstraint
-
-
-
-
-
+#from src.persistence.db import DBRepository
+#from src.config import DevelopmentConfig
 
 
 
 
 cors = CORS()
 repo = RepositoryManager()
+db = SQLAlchemy()
 
 
+#################################################################
+#                   ESTO ES LO MISMO????                        #
+#def create_app(config_class=DevelopmentConfig) -> Flask:       #
+#################################################################
 def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
     """
     Create a Flask app with the given configuration class.
@@ -31,26 +35,15 @@ def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
 #                                           SQLAlchemy                                       #
 ##############################################################################################
     #if app.debug:
-    print("DEBUUUUUUUUUUUUUUUUUUUUUUUUUG MOOOOOOOODEEEEEEE")
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///development.db'
-    db = SQLAlchemy(app)
+    #from flask_sqlalchemy import SQLAlchemy
+    #print("DEBUUUUUUUUUUUUUUUUUUUUUUUUUG MOOOOOOOODEEEEEEE")
+    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///development.db'
 
+    
 
+    
 
-
-
-    class User(db.Model):
-        __tablename__ = 'users'
-
-        id = db.Column(db.String(36), primary_key=True)
-        created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-        updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
-        email = db.Column(db.String(120), unique=True, nullable=False)
-        first_name = db.Column(db.String(120), nullable=False)
-        last_name = db.Column(db.String(120), nullable=False)
-        password = db.Column(db.String(128), nullable=False)
-        is_admin = db.Column(db.Boolean, default=False)
-
+    from sqlalchemy import CheckConstraint
     class Place(db.Model):
         __tablename__ = 'places'
 
@@ -72,6 +65,8 @@ def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
         __table_args__ = (
         CheckConstraint('price_per_night >= 0', name='check_price_per_night_non_negative'),
         CheckConstraint('max_guests >= 0', name='check_max_guests_non_negative'),
+        #CheckConstraint('latitude >= -180', name='check_latitude_valid_values'),
+        #CheckConstraint('latitude <= 180', name='check_latitude_valid_values'),
         )
 
     class Review(db.Model):
@@ -120,6 +115,13 @@ def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
 
     app.config.from_object(config_class)
 
+    ########################################################################
+    #                       VERIFICACIÓN DB URI                            #
+    ########################################################################
+    print(f"SQLALCHEMY_DATABASE_URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
+
+
+
     register_extensions(app)
     register_routes(app)
     register_handlers(app)
@@ -133,6 +135,9 @@ def register_extensions(app: Flask) -> None:
     """Register the extensions for the Flask app"""
     cors.init_app(app, resources={r"/*": {"origins": "*"}})
     repo.init_app(app)
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
     # Further extensions can be added here
 
 
@@ -140,7 +145,7 @@ def register_routes(app: Flask) -> None:
     """Import and register the routes for the Flask app"""
 
     # Import the routes here to avoid circular imports
-    from src.api import api_bp
+    from src.api import api_bp  
 
     # Register the blueprints in the app
     app.register_blueprint(api_bp)
