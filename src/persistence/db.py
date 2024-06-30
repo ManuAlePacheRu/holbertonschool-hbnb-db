@@ -14,48 +14,58 @@
 
 from src.models.base import Base
 from src.persistence.repository import Repository
+#from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import Session
 
-#from src import db
+from src import db
 
 class DBRepository(Repository):
     """Dummy DB repository"""
 
-    """class User(db.Model):
-        id = db.Column(db.String(36), primary_key=True)
-        email = db.Column(db.String(120), unique=True, nullable=False)
-        password = db.Column(db.String(128), nullable=False)
-        is_admin = db.Column(db.Boolean, default=False)
-        created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-        updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())"""
+    #db = SQLAlchemy()
 
 
-
-
-
-
-
-
-
+    """class DataManager:
+        def save_user(self, user):
+            if app.config['USE_DATABASE']:
+                db.session.add(user)
+                db.session.commit()
+            else:
+                # Implement file-based save logic
+                pass"""
 
     def __init__(self) -> None:
-        """Not implemented"""
+        pass
 
     def get_all(self, model_name: str) -> list:
-        """Not implemented"""
-        return []
+        """Get all objects of a given model"""
+        return model_name.query.all()
+        #return []
 
     def get(self, model_name: str, obj_id: str) -> Base | None:
-        """Not implemented"""
+        """Get an object by its ID"""
+        return model_name.query.filter_by(id=obj_id).first()
+        # return model_name.query.get(obj_id)
+        # también se puede así, ya que id es una primarykey
+
 
     def reload(self) -> None:
         """Not implemented"""
 
     def save(self, obj: Base) -> None:
-        """Not implemented"""
+        """Save an object in db"""
+        db.session.add(obj)
+        db.session.commit()
 
     def update(self, obj: Base) -> Base | None:
-        """Not implemented"""
+        """Update an object in db"""
+        o = self.get(obj.__class__.__name__, obj.id)
+        if o:
+            self.save(obj)
 
     def delete(self, obj: Base) -> bool:
-        """Not implemented"""
-        return False
+        """Delete an object in db"""
+        db.session.delete(obj)
+        db.session.commit()
+        #return False
+        return True
