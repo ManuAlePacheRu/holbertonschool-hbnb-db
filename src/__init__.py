@@ -14,7 +14,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 
-
 cors = CORS()
 repo = RepositoryManager()
 db = SQLAlchemy()
@@ -43,66 +42,15 @@ def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
 
     
 
-    from sqlalchemy import CheckConstraint
-    class Place(db.Model):
-        __tablename__ = 'places'
+    
 
-        id = db.Column(db.String(36), primary_key=True)
-        created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-        updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
-        name = db.Column(db.String(120), nullable=False)
-        description = db.Column(db.String(256))
-        address = db.Column(db.String(256), nullable=False)
-        latitude = db.Column(db.Float, nullable=False)
-        longitude = db.Column(db.Float, nullable=False)
-        host_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
-        city_id = db.Column(db.String(36), db.ForeignKey('cities.id'), nullable=False)
-        price_per_night = db.Column(db.Integer, nullable=False)
-        number_of_rooms = db.Column(db.Integer, nullable=False)
-        number_of_bathrooms = db.Column(db.Integer, nullable=False)
-        max_guests = db.Column(db.Integer, nullable=False)
+    
 
-        __table_args__ = (
-        CheckConstraint('price_per_night >= 0', name='check_price_per_night_non_negative'),
-        CheckConstraint('max_guests >= 0', name='check_max_guests_non_negative'),
-        #CheckConstraint('latitude >= -180', name='check_latitude_valid_values'),
-        #CheckConstraint('latitude <= 180', name='check_latitude_valid_values'),
-        )
+    
 
-    class Review(db.Model):
-        __tablename__ = 'reviews'
+    
 
-        id = db.Column(db.String(36), primary_key=True)
-        created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-        updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
-        place_id = db.Column(db.String(36), db.ForeignKey('places.id'), nullable=False)
-        user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
-        comment = db.Column(db.String(256))
-        rating = db.Column(db.Float, nullable=False)
-
-    class City(db.Model):
-        __tablename__ = 'cities'
-
-        id = db.Column(db.String(36), primary_key=True)
-        created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-        updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
-        name = db.Column(db.String(120), nullable=False)
-        country_code = db.Column(db.String(2), db.ForeignKey('countries.code'), nullable=False)
-
-    class Country(db.Model):
-        __tablename__ = 'countries'
-
-        name = db.Column(db.String(120), nullable=False)
-        code = db.Column(db.String(2), primary_key=True)
-
-    class Amenity(db.Model):
-        __tablename__ = 'amenities'
-
-        id = db.Column(db.String(36), primary_key=True)
-        created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-        updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
-        name = db.Column(db.String(120), nullable=False)
-
+    
 
 ##############################################################################################
 #                                           SQLAlchemy                                       #
