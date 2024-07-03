@@ -12,6 +12,17 @@ import os
 from utils.constants import REPOSITORY_ENV_VAR, DEFAULT_REPOSITORY
 
 
+def get_config():
+    env_config = os.getenv('ENV_CONFIG', 'dev').lower()
+    if env_config == 'prod':
+        return ProductionConfig()
+    elif env_config == 'test':
+        return TestingConfig()
+########################################
+    else:
+        return DevelopmentConfig()
+
+
 class Config(ABC):
     """
     Initial configuration settings
@@ -45,8 +56,8 @@ class DevelopmentConfig(Config):
     ```
     """
 
-    #SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///hbnb_dev.db")
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:root@localhost/hbnb_dev'
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///hbnb_dev.db")
+    #SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:root@localhost/hbnb_dev'
     DEBUG = True
 
 
@@ -85,3 +96,4 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL", "postgresql://user:password@localhost/hbnb_prod"
     )
+
