@@ -19,10 +19,6 @@ repo = RepositoryManager()
 db = SQLAlchemy()
 
 
-#################################################################
-#                   ESTO ES LO MISMO????                        #
-#def create_app(config_class=DevelopmentConfig) -> Flask:       #
-#################################################################
 def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
     """
     Create a Flask app with the given configuration class.
@@ -81,6 +77,9 @@ def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
 
 def register_extensions(app: Flask) -> None:
     """Register the extensions for the Flask app"""
+
+    from src.models import amenity, city, country, place, review, user
+
     cors.init_app(app, resources={r"/*": {"origins": "*"}})
     repo.init_app(app)
     db.init_app(app)
