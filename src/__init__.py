@@ -1,4 +1,12 @@
 """ Initialize the Flask app. """
+from dotenv import load_dotenv
+from src.config import get_config
+load_dotenv()
+###### 
+# con esto leeré las ENV en .env en la raiz
+# así le puedo dar una configuración dinamica al create_app
+# sin tener que crear las variables manualmente, solo modificar
+# el archivo .env 
 
 from flask import Flask
 from flask_cors import CORS
@@ -19,7 +27,8 @@ repo = RepositoryManager()
 db = SQLAlchemy()
 
 
-def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
+#def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
+def create_app() -> Flask:
     """
     Create a Flask app with the given configuration class.
     The default configuration class is DevelopmentConfig.
@@ -57,7 +66,8 @@ def create_app(config_class="src.config.DevelopmentConfig") -> Flask:
 
     app.url_map.strict_slashes = False
 
-    app.config.from_object(config_class)
+    #app.config.from_object(config_class)
+    app.config.from_object(get_config())
 
     ########################################################################
     #                       VERIFICACIÓN DB URI                            #
