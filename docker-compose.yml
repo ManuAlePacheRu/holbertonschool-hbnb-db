@@ -13,3 +13,5 @@ services:
     environment:
       - MYSQL_INITDB_ROOT_USERNAME=admin
       - MYSQL_INIT_ROOT_PASSWORD=notPermiissionsNedded123
+      - DB_HOST=database
+      - APP_PORT=5000
