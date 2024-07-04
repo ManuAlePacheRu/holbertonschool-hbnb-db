@@ -13,4 +13,4 @@ ENV PORT 5000
 
 EXPOSE $PORT
 
-CMD gunicorn hbnb:app -w 2 -b 0.0.0.0:$PORT
+CMD gunicorn hbnb:app -w 4 -b 0.0.0.0:$PORT
