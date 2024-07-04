@@ -88,7 +88,14 @@ def create_app() -> Flask:
 def register_extensions(app: Flask) -> None:
     """Register the extensions for the Flask app"""
 
-    from src.models import amenity, city, country, place, review, user
+    from src.models.user import User
+    from src.models.country import Country
+    from src.models.city import City
+    from src.models.amenity import Amenity
+    from src.models.place import Place
+    from src.models.review import Review
+    from src.models.amenity import PlaceAmenity
+    
 
     cors.init_app(app, resources={r"/*": {"origins": "*"}})
     repo.init_app(app)
