@@ -2,20 +2,20 @@
 
 from datetime import datetime
 from typing import Any, Optional
-from src import repo
+from src import repo, db
 import uuid
 from abc import ABC, abstractmethod
 
 
 #class Base(ABC):
-class Base():
+class Base:
     """
     Base Interface for all models
     """
 
-    id: str
-    created_at: datetime
-    updated_at: datetime
+    id = db.Column(db.String(36), primary_key=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
 
     def __init__(
         self,
