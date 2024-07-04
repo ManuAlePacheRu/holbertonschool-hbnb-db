@@ -6,11 +6,7 @@ import uuid
 from src.persistence.memory import MemoryRepository
 from src.persistence.file import FileRepository
 from src.persistence.db import DBRepository
-from src.persistence.repository import RepositoryManager
-
-from flask import Flask
 from src import create_app, db
-from src.config import DevelopmentConfig
 
 class TestUser_module(unittest.TestCase):
 
@@ -67,7 +63,6 @@ class TestUser_module(unittest.TestCase):
         self.assertIn('created_at', user_dict)
         self.assertIn('updated_at', user_dict)
 
-#class TestUser_persistence(unittest.TestCase):
 
 class TestUser_memory(unittest.TestCase):
     def setUp(self):
@@ -99,7 +94,7 @@ class TestUser_memory(unittest.TestCase):
 class TestUser_file(unittest.TestCase):
     def setUp(self):
         """Set up test variables"""
-        self.repo = DBRepository()
+        self.repo = FileRepository()
         self.email = "test@example.com"
         self.first_name = "Test"
         self.last_name = "User"
@@ -123,42 +118,12 @@ class TestUser_file(unittest.TestCase):
         #print(users)
         self.assertIn(self.user, users)
 
-"""
-
-class TestUser_db(unittest.TestCase):
-    def setUp(self):
-        self.repo = FileRepository()
-        self.email = "test@example.com"
-        self.first_name = "Test"
-        self.last_name = "User"
-        self.password = "password123"
-        self.is_admin = True
-        self.user_id = str(uuid.uuid4())
-        self.user = User(
-            id=self.user_id,
-            email=self.email,
-            first_name=self.first_name,
-            last_name=self.last_name,
-            password=self.password,
-            is_admin=self.is_admin,
-        )
-
-    def test_save_user(self):
-        print("db user")
-        print(self.user)
-        self.repo.save(self.user)
-        users = self.repo.get_all("user")
-        print(users)
-        self.assertIn(self.user, users)
-        """
-
-
 class UserModelTestCase(unittest.TestCase):
     def setUp(self) -> None:
-        self.app = create_app(config_class=DevelopmentConfig())
+        self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
-        self.repo = RepositoryManager()
+        self.repo = DBRepository()
         self.db = db
 
     def tearDown(self) -> None:
@@ -167,43 +132,57 @@ class UserModelTestCase(unittest.TestCase):
         self.app_context.pop()
 
     def test_create_user(self):
-        with self.app.app_context():
-            user = User(
-                email="test@example.com",
-                first_name="Test",
-                last_name="User",
-                password="password123",
-                is_admin=True
-            )
-            #print("file user")
-            #print(self.user)
-            self.repo.save(user)
-            users = self.repo.get_all("user")
-            #print(users)
-            self.assertIn(self.user, users)
+        #with self.app.app_context():
+        user = User(
+            email="test@example.com",
+            first_name="Test",
+            last_name="User",
+            password="password123",
+            is_admin=True
+        )
+        #print("file user")
+        #print("#############################")
+        #print("#############################")
+        #print("#############################")
+        #print(user)
+        self.repo.save(user)
+        db.session.refresh(user)
+        users = self.repo.get_all(user)
+        #print("print users")
+        #print(users)
+        self.assertIn(user, users)
 
-        """with self.app_context():
-            conect = db.engine.connect()
-            tables = conect.execute("SHOW TABLES")
+    def test_update_user(self):
+        user = User(
+            email="test2@example.com",
+            first_name="Test",
+            last_name="User",
+            password="password123",
+            is_admin=True
+        )
+        self.repo.save(user)
+        user.first_name = "update_name"
+        users = self.repo.get_all(user)
+        self.assertIn(user, users)
 
-            print("Tablas:")
-            for tabla in tables:
-                print(tabla)
+    def test_delete_user(self):
+        user = User(
+            email="test3@example.com",
+            first_name="Test",
+            last_name="User",
+            password="password123",
+            is_admin=True
+        )
+        self.repo.save(user)
+        #print(f"save user = {user}")
+        users = self.repo.get_all(user)
+        #print(f"users in db = {users}")
+        #print(f"delete user = {user}")
+        self.repo.delete(user)
+        users = self.repo.get_all(user)
+        #print(f"users in db = {users}")
+        self.assertNotIn(user, users)
 
-            conect.close()
-            """
-        
-        """with self.app_context():
-            db.session.add(user)
-            db.session.commit()
-
-            saved_user = User.query.filter_by(email="test@example.com").first()
-            self.assertIsNotNone(saved_user)
-            self.assertEqual(saved_user.email, "test@example.com")
-            self.assertTrue(saved_user.is_admin)"""
-        
-
-            
 
 if __name__ == "__main__":
     unittest.main()
