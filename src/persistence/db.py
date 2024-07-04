@@ -44,8 +44,8 @@ class DBRepository(Repository):
 
     def get(self, model_name: str, obj_id: str) -> Base | None:
         """Get an object by its ID"""
-        return model_name.query.filter_by(id=obj_id).first()
-        # return model_name.query.get(obj_id)
+        #return model_name.query.filter_by(id=obj_id).first()
+        return model_name.query.get(obj_id)
         # también se puede así, ya que id es una primarykey
 
 
@@ -59,7 +59,7 @@ class DBRepository(Repository):
 
     def update(self, obj: Base) -> Base | None:
         """Update an object in db"""
-        o = self.get(obj.__class__.__name__, obj.id)
+        o = self.get(obj.__class__, obj.id)
         if o:
             self.save(obj)
 
