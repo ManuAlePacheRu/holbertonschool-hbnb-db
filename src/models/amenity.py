@@ -8,11 +8,8 @@ from src import repo, db
 
 class Amenity(Base, db.Model):
     """Amenity representation"""
-    __tablename__ = 'amenities'
+    #__tablename__ = 'amenities'
 
-    id = db.Column(db.String(36), primary_key=True)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
     name = db.Column(db.String(120), nullable=False)
 
     """name: str"""
@@ -68,11 +65,15 @@ class Amenity(Base, db.Model):
         return amenity
 
 
-class PlaceAmenity(Base):
+class PlaceAmenity(Base, db.Model):
     """PlaceAmenity representation"""
+    #__tablename__ = 'place_amenities'
 
-    place_id: str
-    amenity_id: str
+    place_id = db.Column(db.String(36), db.ForeignKey('place.id'), nullable=False)
+    amenity_id = db.Column(db.String(36), db.ForeignKey('amenity.id'), nullable=False)
+    
+    """place_id: str
+    amenity_id: str"""
 
     def __init__(self, place_id: str, amenity_id: str, **kw) -> None:
         """Dummy init"""
