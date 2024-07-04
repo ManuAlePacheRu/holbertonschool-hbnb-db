@@ -12,7 +12,7 @@ class Country(db.Model):
 
     This class is used to get and list countries
     """
-    __tablename__ = 'countries'
+    #__tablename__ = 'countries'
 
     name = db.Column(db.String(120), nullable=False)
     code = db.Column(db.String(2), primary_key=True)

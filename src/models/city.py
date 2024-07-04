@@ -6,16 +6,11 @@ from src.models.base import Base
 from src import repo, db
 from src.models.country import Country
 
-class City(Base):
+class City(Base, db.Model):
     """City representation"""
 
-    __tablename__ = 'cities'
-
-    id = db.Column(db.String(36), primary_key=True)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
     name = db.Column(db.String(120), nullable=False)
-    country_code = db.Column(db.String(2), db.ForeignKey('countries.code'), nullable=False)
+    country_code = db.Column(db.String(2), db.ForeignKey('country.code'), nullable=False)
 
     """name: str
     country_code: str"""

@@ -13,13 +13,8 @@ class User(Base, db.Model):
     """User representation"""
 
     #class User(db.Model):
-    __tablename__ = 'users'
+    #__tablename__ = 'users'
 
-    id = db.Column(db.String(36), primary_key=True)
-    #created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
-    #updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp(), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime, nullable=False)
-    updated_at = db.Column(db.DateTime, onupdate=datetime, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     first_name = db.Column(db.String(120), nullable=False)
     last_name = db.Column(db.String(120), nullable=False)
@@ -36,7 +31,7 @@ class User(Base, db.Model):
         email: str,
         first_name: str,
         last_name: str,
-        password: Optional[str] = None,
+        password: str,
         is_admin: Optional[bool] = None,
         **kw,
     ):
@@ -109,6 +104,6 @@ class User(Base, db.Model):
         return user
 
 
-"""User.query.all()
-pepe = User("asljdlaskjd@.comasd", "pepe", "señor", id=3)
-User.query.filter_by(id=3).first()"""
+#User.query.all()
+# pepe = User("asljdlaskjd@.comasd", "pepe", "señor", id=3)
+#User.query.filter_by(id=3).first()##

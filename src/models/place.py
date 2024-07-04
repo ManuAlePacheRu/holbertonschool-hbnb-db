@@ -11,18 +11,15 @@ from sqlalchemy import CheckConstraint
 class Place(Base, db.Model):
     """Place representation"""
 
-    __tablename__ = 'places'
+    #__tablename__ = 'places'
 
-    id = db.Column(db.String(36), primary_key=True)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    updated_at = db.Column(db.DateTime, onupdate=db.func.current_timestamp())
     name = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(256))
     address = db.Column(db.String(256), nullable=False)
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
-    host_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
-    city_id = db.Column(db.String(36), db.ForeignKey('cities.id'), nullable=False)
+    host_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
+    city_id = db.Column(db.String(36), db.ForeignKey('city.id'), nullable=False)
     price_per_night = db.Column(db.Integer, nullable=False)
     number_of_rooms = db.Column(db.Integer, nullable=False)
     number_of_bathrooms = db.Column(db.Integer, nullable=False)
