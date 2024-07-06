@@ -17,6 +17,9 @@ class Country(db.Model):
     name = db.Column(db.String(120), nullable=False)
     code = db.Column(db.String(2), primary_key=True)
 
+    #cities = db.relationship("city", cascade="all, delete-orpahn")
+
+
     """name: str
     code: str
     cities: list"""

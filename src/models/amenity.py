@@ -70,6 +70,7 @@ class PlaceAmenity(Base, db.Model):
     #__tablename__ = 'place_amenities'
 
     place_id = db.Column(db.String(36), db.ForeignKey('place.id'), nullable=False)
+    #place_id = db.Column(db.String(36), db.ForeignKey('place.id'), ondelete='CASCADE', nullable=False)
     amenity_id = db.Column(db.String(36), db.ForeignKey('amenity.id'), nullable=False)
     
     """place_id: str

@@ -20,6 +20,10 @@ class User(Base, db.Model):
     last_name = db.Column(db.String(120), nullable=False)
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+
+    #places = db.relationship("place", cascade="all, delete-orpahn")
+    #reviews = db.relationship("review", cascade="all, delete-orpahn")
+    
     
     """email: str
     password: str | None
@@ -102,7 +106,6 @@ class User(Base, db.Model):
         repo.update(user)
 
         return user
-
 
 #User.query.all()
 # pepe = User("asljdlaskjd@.comasd", "pepe", "señor", id=3)

@@ -11,6 +11,7 @@ class City(Base, db.Model):
 
     name = db.Column(db.String(120), nullable=False)
     country_code = db.Column(db.String(2), db.ForeignKey('country.code'), nullable=False)
+    #country_code = db.Column(db.String(2), db.ForeignKey('country.code')""", ondelete='CASCADE'""", nullable=False)
 
     """name: str
     country_code: str"""
