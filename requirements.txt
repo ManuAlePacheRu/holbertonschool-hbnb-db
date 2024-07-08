@@ -4,6 +4,10 @@ flask-restx
 SQLAlchemy==2.0.31
 mysql-connector-python==8.0.28
 gunicorn
+flask-sqlalchemy
+flask-bcrypt
+flask-jwt-extended
+flask-restx
 
 ###############
 SQLAlchemy

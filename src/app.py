@@ -1,10 +1,17 @@
 from flask import Flask, jsonify, request
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_bcrypt import Bcrypt
+from flask_restx import Api
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
 # Configurar una clave para JWT
 app.config['JWT_SECRET_KEY'] = 'abc.1234'
+
+# Inicializa las extensiones
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
 
 # Inicialización de JWTManager
 jwt = JWTManager(app)
